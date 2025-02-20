@@ -2,7 +2,7 @@ import re
 
 
 def add_text(id: str) -> str:
-    with open("test.srt", encoding="iso-8859-15") as subtitle:
+    with open(id, encoding="iso-8859-15") as subtitle:
         cleaned_text = ""
         for line in subtitle:
             line = line.replace("\n", "")
