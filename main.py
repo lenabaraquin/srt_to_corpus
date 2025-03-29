@@ -1,20 +1,18 @@
 import re
+import os
 
 
 def add_text(id: str) -> str:
-    with open(id, encoding="iso-8859-15") as subtitle:
+    with open(id) as subtitle:
         cleaned_text = ""
         for line in subtitle:
-            line = line.replace("\n", "")
-            if "" == line:
-                continue
             if re.match(r"^\d+", line):
                 continue
-            if "-->" in line:
+            if re.match("-->", line):
                 continue
-            line = re.sub(r"</?\w+>", "", line)
             cleaned_text += line
             cleaned_text += "\n"
+        re.sub(r"\n+", "\n", cleaned_text)
         return cleaned_text
 
 
@@ -30,14 +28,16 @@ def add_end_balise() -> str:
     return to_add
 
 
-def generate_corpus() -> str:
-    id = "test.srt"
+def generate_corpus(dir_path: str) -> str:
     corpus = ""
-    corpus += add_start_balise(id)
-    corpus += add_text(id)
-    corpus += add_end_balise()
+    dir_content = os.listdir(dir_path)
+    for id in dir_content:
+        id = dir_path + "/" + id
+        corpus += add_start_balise(id)
+        corpus += add_text(id)
+        corpus += add_end_balise()
     return corpus
 
 
-corpus = generate_corpus()
+corpus = generate_corpus("corpus_srt")
 print(corpus)
