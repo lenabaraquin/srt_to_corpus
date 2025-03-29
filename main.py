@@ -2,18 +2,20 @@ import re
 import os
 
 
+def clean_text(text: str) -> str:
+    time_stamp = re.compile(r".*-->.*")
+    cleaned_text = time_stamp.sub("", text)
+    subtitle_n = re.compile(r"\d")
+    cleaned_text = subtitle_n.sub("", cleaned_text)
+    new_line = re.compile(r"\n+")
+    cleaned_text = new_line.sub("\n", cleaned_text)
+    return cleaned_text
+
+
 def add_text(id: str) -> str:
     with open(id) as subtitle:
-        cleaned_text = ""
-        for line in subtitle:
-            if re.match(r"^\d+", line):
-                continue
-            if re.match("-->", line):
-                continue
-            cleaned_text += line
-            cleaned_text += "\n"
-        re.sub(r"\n+", "\n", cleaned_text)
-        return cleaned_text
+        text = subtitle.read()
+        return clean_text(text)
 
 
 def add_start_balise(id: str) -> str:
